@@ -1,4 +1,4 @@
-name: Deploy to EC2
+name: Deploy to EC2 via AWS SSM
 
 on:
   push:
@@ -12,15 +12,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.9.0
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
         with:
-          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Deploy to EC2
+      - name: Trigger SSM deploy command on EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-            cd ~/flask-ec2-api
-            git pull origin main
-            sudo systemctl restart flask-api
-          EOF
+          aws ssm send-command \
+            --document-name "AWS-RunShellScript" \
+            --comment "GitHub Deploy Trigger" \
+            --instance-ids ${{ secrets.EC2_INSTANCE_ID }} \
+            --parameters commands="cd ~/flask-ec2-api && git pull origin main && sudo systemctl restart flask-api" \
+            --output text
