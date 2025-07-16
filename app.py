@@ -28,6 +28,7 @@ def system_info():
         "os_version": platform.version(),
         "python_version": platform.python_version(),
         "uptime": os.popen("uptime -p").read().strip()
+    })
         
 @app.route("/api/health")
 def health_check():
@@ -36,7 +37,8 @@ def health_check():
         "cpu_percent": psutil.cpu_percent(interval=1),
         "ram_percent": psutil.virtual_memory().percent,
         "disk_percent": disk.used / disk.total * 100
-        
+    })
+    
 @app.route("/api/network")
 def network_info():
     return jsonify({
@@ -44,7 +46,8 @@ def network_info():
         "ip_address": socket.gethostbyname(socket.gethostname()),
         "interfaces": list(psutil.net_if_addrs().keys()),
         "gateways": psutil.net_if_stats()
-        
+    })
+    
 @app.route("/api/processes")
 def top_processes():
     procs = sorted(psutil.process_iter(['pid', 'name', 'memory_percent']),
@@ -52,7 +55,5 @@ def top_processes():
                    reverse=True)[:5]
     return jsonify([p.info for p in procs])
     
-    })
-
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
