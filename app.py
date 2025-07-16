@@ -14,7 +14,7 @@ def index():
 
 @app.route("/api/status")
 def status():
-    return jsonify({"status": "ok", "message": "API is running!"})
+    return jsonify({"status": "ok", "message": "API is running"})
 
 @app.route("/api/time")
 def current_time():
