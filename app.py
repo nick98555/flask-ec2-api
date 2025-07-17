@@ -4,7 +4,8 @@ import socket
 import time
 import shutil
 import psutil
-from flask import Flask, jsonify
+import sqlite3
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -14,7 +15,16 @@ def index():
 
 @app.route("/api/status")
 def status():
-    return jsonify({"status": "ok", "message": "API is running"})
+    conn = sqlite3.connect("apilogs.db")
+    c = conn.cursor()
+    c.execute("INSERT INTO logs (timestamp, endpoint, ip_address) VALUES (?, ?, ?)", (
+        time.strftime("%Y-%m-%d %H:%M:%S"),
+        "/api/status",
+        request.remote_addr
+    ))
+    conn.commit()
+    conn.close()
+    return jsonify({"status": "ok", "message": "API is running!"})
 
 @app.route("/api/time")
 def current_time():
@@ -69,6 +79,34 @@ def top_processes():
             "memory_percent": f"{p.info['memory_percent']:.2f}%"
         } for p in procs
     ])
+
+@app.route("/api/logs")
+def get_logs():
+    conn = sqlite3.connect("apilogs.db")
+    c = conn.cursor()
+    c.execute("SELECT timestamp, endpoint, ip_address FROM logs ORDER BY id DESC LIMIT 10")
+    rows = c.fetchall()
+    conn.close()
+
+    return jsonify([
+        {"timestamp": r[0], "endpoint": r[1], "ip_address": r[2]} for r in rows
+    ])
+    
+def init_db():
+    conn = sqlite3.connect("apilogs.db")
+    c = conn.cursor()
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS logs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            timestamp TEXT,
+            endpoint TEXT,
+            ip_address TEXT
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+init_db()    
     
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
