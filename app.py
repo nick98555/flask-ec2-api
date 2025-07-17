@@ -5,7 +5,7 @@ import time
 import shutil
 import psutil
 import sqlite3
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 
 app = Flask(__name__)
 
@@ -13,17 +13,22 @@ app = Flask(__name__)
 def index():
     return "Welcome to the Flask API!"
 
+# Auto-log all /api/* requests
+@app.before_request
+def log_all_requests():
+    if request.path.startswith("/api/") and request.path != "/api/logs":
+        conn = sqlite3.connect("apilogs.db")
+        c = conn.cursor()
+        c.execute("INSERT INTO logs (timestamp, endpoint, ip_address) VALUES (?, ?, ?)", (
+            time.strftime("%Y-%m-%d %H:%M:%S"),
+            request.path,
+            request.remote_addr
+        ))
+        conn.commit()
+        conn.close()
+
 @app.route("/api/status")
 def status():
-    conn = sqlite3.connect("apilogs.db")
-    c = conn.cursor()
-    c.execute("INSERT INTO logs (timestamp, endpoint, ip_address) VALUES (?, ?, ?)", (
-        time.strftime("%Y-%m-%d %H:%M:%S"),
-        "/api/status",
-        request.remote_addr
-    ))
-    conn.commit()
-    conn.close()
     return jsonify({"status": "ok", "message": "API is running!"})
 
 @app.route("/api/time")
@@ -82,15 +87,25 @@ def top_processes():
 
 @app.route("/api/logs")
 def get_logs():
+    limit = request.args.get("limit", default=10, type=int)
     conn = sqlite3.connect("apilogs.db")
     c = conn.cursor()
-    c.execute("SELECT timestamp, endpoint, ip_address FROM logs ORDER BY id DESC LIMIT 10")
+    c.execute("SELECT timestamp, endpoint, ip_address FROM logs ORDER BY id DESC LIMIT ?", (limit,))
     rows = c.fetchall()
     conn.close()
-
     return jsonify([
         {"timestamp": r[0], "endpoint": r[1], "ip_address": r[2]} for r in rows
     ])
+    
+# clears all logs
+@app.route("/api/logs/clear", methods=["POST"])
+def clear_logs():
+    conn = sqlite3.connect("apilogs.db")
+    c = conn.cursor()
+    c.execute("DELETE FROM logs")
+    conn.commit()
+    conn.close()
+    return jsonify({"status": "success", "message": "All logs cleared."})    
     
 def init_db():
     conn = sqlite3.connect("apilogs.db")
