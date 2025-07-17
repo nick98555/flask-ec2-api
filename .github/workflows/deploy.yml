@@ -25,5 +25,5 @@ jobs:
             --document-name "AWS-RunShellScript" \
             --comment "GitHub Deploy Trigger" \
             --instance-ids ${{ secrets.EC2_INSTANCE_ID }} \
-            --parameters commands="cd ~/flask-ec2-api && git fetch origin && git reset --hard origin/main && sudo systemctl restart flask-api" \
+            --parameters '{"commands":["git fetch origin","git reset --hard origin/main","sudo systemctl restart flask-api"],"workingDirectory":["/home/ubuntu/flask-ec2-api"]}' \
             --output text
