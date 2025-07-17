@@ -2,9 +2,9 @@ import os
 import platform
 import socket
 import time
+import sqlite3
 import shutil
 import psutil
-import sqlite3
 from flask import Flask, jsonify, request, abort
 
 app = Flask(__name__)
