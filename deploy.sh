@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# Mark repo as safe system-wide
+# Trust the repo directory
 sudo git config --system --add safe.directory /home/ubuntu/flask-ec2-api
+
+# Tell Git to use your GitHub SSH key
+export GIT_SSH_COMMAND="ssh -i /home/ubuntu/.ssh/id_rsa -o StrictHostKeyChecking=no"
 
 cd /home/ubuntu/flask-ec2-api || { echo "Failed to cd into repo directory"; exit 1; }
 
