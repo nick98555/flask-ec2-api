@@ -5,7 +5,7 @@ import time
 import sqlite3
 import shutil
 import psutil
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request, abort, render_template
 
 app = Flask(__name__)
 
@@ -105,7 +105,29 @@ def clear_logs():
     c.execute("DELETE FROM logs")
     conn.commit()
     conn.close()
-    return jsonify({"status": "success", "message": "All logs cleared."})    
+    return jsonify({"status": "success", "message": "All logs cleared."})
+
+@app.route("/api/syslogs")
+def get_syslogs():
+    conn = sqlite3.connect("syslogs.db")
+    c = conn.cursor()
+    c.execute("SELECT ip, user, timestamp FROM failed_logins ORDER BY timestamp DESC LIMIT 100")
+    rows = c.fetchall()
+    conn.close()
+    return jsonify([
+        {"ip": row[0], "user": row[1], "timestamp": row[2]}
+        for row in rows
+    ])    
+    
+@app.route("/dashboard")
+def dashboard():
+    conn = sqlite3.connect("syslogs.db")
+    c = conn.cursor()
+    c.execute("SELECT ip, user, timestamp FROM failed_logins ORDER BY timestamp DESC LIMIT 100")
+    logins = c.fetchall()
+    conn.close()
+    return render_template("dashboard.html", logins=logins)
+   
     
 def init_db():
     conn = sqlite3.connect("apilogs.db")
