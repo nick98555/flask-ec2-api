@@ -85,39 +85,39 @@ def top_processes():
         } for p in procs
     ])
 
-@app.route("/api/logs")
-def get_logs():
-    limit = request.args.get("limit", default=10, type=int)
-    conn = sqlite3.connect("apilogs.db")
-    c = conn.cursor()
-    c.execute("SELECT timestamp, endpoint, ip_address FROM logs ORDER BY id DESC LIMIT ?", (limit,))
-    rows = c.fetchall()
-    conn.close()
-    return jsonify([
-        {"timestamp": r[0], "endpoint": r[1], "ip_address": r[2]} for r in rows
-    ])
+# @app.route("/api/logs")
+# def get_logs():
+    # limit = request.args.get("limit", default=10, type=int)
+    # conn = sqlite3.connect("apilogs.db")
+    # c = conn.cursor()
+    # c.execute("SELECT timestamp, endpoint, ip_address FROM logs ORDER BY id DESC LIMIT ?", (limit,))
+    # rows = c.fetchall()
+    # conn.close()
+    # return jsonify([
+        # {"timestamp": r[0], "endpoint": r[1], "ip_address": r[2]} for r in rows
+    # ])
     
-# clears all logs
-@app.route("/api/logs/clear", methods=["POST"])
-def clear_logs():
-    conn = sqlite3.connect("apilogs.db")
-    c = conn.cursor()
-    c.execute("DELETE FROM logs")
-    conn.commit()
-    conn.close()
-    return jsonify({"status": "success", "message": "All logs cleared."})
+# # clears all logs
+# @app.route("/api/logs/clear", methods=["POST"])
+# def clear_logs():
+    # conn = sqlite3.connect("apilogs.db")
+    # c = conn.cursor()
+    # c.execute("DELETE FROM logs")
+    # conn.commit()
+    # conn.close()
+    # return jsonify({"status": "success", "message": "All logs cleared."})
 
-@app.route("/api/syslogs")
-def get_syslogs():
-    conn = sqlite3.connect("syslogs.db")
-    c = conn.cursor()
-    c.execute("SELECT ip, user, timestamp FROM failed_logins ORDER BY timestamp DESC LIMIT 100")
-    rows = c.fetchall()
-    conn.close()
-    return jsonify([
-        {"ip": row[0], "user": row[1], "timestamp": row[2]}
-        for row in rows
-    ])    
+# @app.route("/api/syslogs")
+# def get_syslogs():
+    # conn = sqlite3.connect("syslogs.db")
+    # c = conn.cursor()
+    # c.execute("SELECT ip, user, timestamp FROM failed_logins ORDER BY timestamp DESC LIMIT 100")
+    # rows = c.fetchall()
+    # conn.close()
+    # return jsonify([
+        # {"ip": row[0], "user": row[1], "timestamp": row[2]}
+        # for row in rows
+    # ])    
  
 @app.route("/dashboard/apilogs")
 def api_logs_dashboard():
