@@ -123,10 +123,11 @@ def get_syslogs():
 def api_logs_dashboard():
     conn = sqlite3.connect("apilogs.db")
     c = conn.cursor()
-    c.execute("SELECT timestamp, endpoint, ip_address FROM logs ORDER BY timestamp DESC LIMIT 100")
+    c.execute("SELECT timestamp, endpoint FROM logs ORDER BY timestamp DESC LIMIT 100")
     logs = c.fetchall()
     conn.close()
     return render_template("apilogs.html", logs=logs)
+
  
     
 def init_db():
