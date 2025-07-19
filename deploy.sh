@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Trust the repo directory to avoid "dubious ownership" error
+git config --global --add safe.directory /home/ubuntu/flask-ec2-api
+
 cd /home/ubuntu/flask-ec2-api || { echo "Failed to cd into repo directory"; exit 1; }
 
 echo "Current branch:"
