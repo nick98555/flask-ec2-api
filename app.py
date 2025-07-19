@@ -118,16 +118,16 @@ def get_syslogs():
         {"ip": row[0], "user": row[1], "timestamp": row[2]}
         for row in rows
     ])    
-    
-@app.route("/dashboard")
-def dashboard():
-    conn = sqlite3.connect("syslogs.db")
+ 
+@app.route("/dashboard/apilogs")
+def api_logs_dashboard():
+    conn = sqlite3.connect("apilogs.db")
     c = conn.cursor()
-    c.execute("SELECT ip, user, timestamp FROM failed_logins ORDER BY timestamp DESC LIMIT 100")
-    logins = c.fetchall()
+    c.execute("SELECT timestamp, endpoint, ip_address FROM logs ORDER BY timestamp DESC LIMIT 100")
+    logs = c.fetchall()
     conn.close()
-    return render_template("dashboard.html", logins=logins)
-   
+    return render_template("apilogs.html", logs=logs)
+ 
     
 def init_db():
     conn = sqlite3.connect("apilogs.db")
