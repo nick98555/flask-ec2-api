@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Failed Login Attempts{% endblock %}
+
+{% block content %}
+<h2>SSH Login Failures</h2>
+<table>
+    <thead>
+        <tr>
+            <th>IP Address</th>
+            <th>Username</th>
+            <th>Timestamp</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in logins %}
+        <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

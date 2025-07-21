@@ -10,8 +10,8 @@ from flask import Flask, jsonify, request, abort, render_template
 app = Flask(__name__)
 
 @app.route("/")
-def index():
-    return "Welcome to the Flask API!"
+def home():
+    return render_template("index.html")
 
 # Auto-log all /api/* requests
 @app.before_request

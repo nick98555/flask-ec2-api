@@ -1,31 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>API Access Logs</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 2em; }
-        table { border-collapse: collapse; width: 100%; }
-        th, td { padding: 8px; border: 1px solid #ccc; }
-        th { background-color: #f2f2f2; }
-    </style>
-</head>
-<body>
-    <h1>API Access Log</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Timestamp</th>
-                <th>Accessed Endpoint</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for log in logs %}
-            <tr>
-                <td>{{ log[0] }}</td>
-                <td>{{ log[1] }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}API Access Logs{% endblock %}
+
+{% block content %}
+<h2>API Access Log</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Timestamp</th>
+            <th>Endpoint</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for log in logs %}
+        <tr>
+            <td>{{ log[0] }}</td>
+            <td>{{ log[1] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

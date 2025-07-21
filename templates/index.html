@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Flask Dashboard{% endblock %}
+
+{% block content %}
+    <h2>Welcome</h2>
+    <p>This is a lightweight personal monitoring dashboard hosted on AWS EC2 using Flask, Gunicorn, and Nginx.</p>
+    <ul>
+        <li><strong>API Access Logs:</strong> Track which endpoints are being used</li>
+        <li><strong>Login Failure Monitoring:</strong> See recent failed SSH login attempts</li>
+    </ul>
+{% endblock %}
