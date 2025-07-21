@@ -128,7 +128,9 @@ def api_logs_dashboard():
     conn.close()
     return render_template("apilogs.html", logs=logs)
 
- 
+ @app.route("/dashboard")
+def dashboard():
+    return render_template("dashboard.html")
     
 def init_db():
     conn = sqlite3.connect("apilogs.db")

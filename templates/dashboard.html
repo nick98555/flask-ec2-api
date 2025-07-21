@@ -1,25 +1,78 @@
 {% extends "base.html" %}
 
-{% block title %}Failed Login Attempts{% endblock %}
+{% block title %}System Dashboard{% endblock %}
 
 {% block content %}
-<h2>SSH Login Failures</h2>
-<table>
-    <thead>
-        <tr>
-            <th>IP Address</th>
-            <th>Username</th>
-            <th>Timestamp</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for row in logins %}
-        <tr>
-            <td>{{ row[0] }}</td>
-            <td>{{ row[1] }}</td>
-            <td>{{ row[2] }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<h2>Live System Stats</h2>
+
+<div id="system-info"></div>
+<div id="health"></div>
+<div id="processes"></div>
+<div id="network"></div>
+
+<script>
+async function fetchAndDisplay(endpoint, targetId, formatter) {
+    try {
+        const response = await fetch(endpoint);
+        const data = await response.json();
+        document.getElementById(targetId).innerHTML = formatter(data);
+    } catch (err) {
+        document.getElementById(targetId).innerHTML = `<p>Error loading ${endpoint}</p>`;
+    }
+}
+
+function formatSystemInfo(data) {
+    return `
+        <h3>System Info</h3>
+        <ul>
+            <li><strong>Hostname:</strong> ${data.hostname}</li>
+            <li><strong>OS:</strong> ${data.os} (${data.os_version})</li>
+            <li><strong>Python:</strong> ${data.python_version}</li>
+            <li><strong>Uptime:</strong> ${data.uptime}</li>
+        </ul>`;
+}
+
+function formatHealth(data) {
+    return `
+        <h3>System Health</h3>
+        <ul>
+            <li><strong>CPU Usage:</strong> ${data.cpu_usage_percent}</li>
+            <li><strong>Memory Usage:</strong> ${data.memory_usage_percent}</li>
+            <li><strong>Disk Usage:</strong> ${data.disk_usage_percent}</li>
+        </ul>`;
+}
+
+function formatProcesses(data) {
+    return `
+        <h3>Top Processes</h3>
+        <table>
+            <thead><tr><th>PID</th><th>Name</th><th>Memory %</th></tr></thead>
+            <tbody>
+                ${data.map(p => `<tr><td>${p.pid}</td><td>${p.name}</td><td>${p.memory_percent}</td></tr>`).join("")}
+            </tbody>
+        </table>`;
+}
+
+function formatNetwork(data) {
+    const interfaces = Object.entries(data.interfaces).map(([iface, val]) => {
+        return `<li><strong>${iface}</strong>: ${val.ip_addresses.join(", ")}</li>`;
+    }).join("");
+
+    const status = Object.entries(data.interface_status).map(([iface, up]) => {
+        return `<li><strong>${iface}</strong>: ${up ? "🟢 Up" : "🔴 Down"}</li>`;
+    }).join("");
+
+    return `
+        <h3>Network Interfaces</h3>
+        <ul>${interfaces}</ul>
+        <h4>Status</h4>
+        <ul>${status}</ul>`;
+}
+
+fetchAndDisplay("/api/info", "system-info", formatSystemInfo);
+fetchAndDisplay("/api/health", "health", formatHealth);
+fetchAndDisplay("/api/processes", "processes", formatProcesses);
+fetchAndDisplay("/api/network", "network", formatNetwork);
+</script>
+
 {% endblock %}
