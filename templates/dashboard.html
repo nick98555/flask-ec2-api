@@ -25,8 +25,8 @@ function formatSystemInfo(data) {
     return `
         <h3>System Info</h3>
         <ul>
-            <li><strong>Hostname:</strong> ${data.hostname}</li>
-            <li><strong>OS:</strong> ${data.os} (${data.os_version})</li>
+            <li><strong>Hostname:</strong> my-dashboard <em>(Masked for security)</em></li>
+            <li><strong>OS:</strong> Ubuntu 22.04 LTS <em>(Removed kernel version for security)</em></li>
             <li><strong>Python:</strong> ${data.python_version}</li>
             <li><strong>Uptime:</strong> ${data.uptime}</li>
         </ul>`;
@@ -55,11 +55,12 @@ function formatProcesses(data) {
 
 function formatNetwork(data) {
     const interfaces = Object.entries(data.interfaces).map(([iface, val]) => {
-        return `<li><strong>${iface}</strong>: ${val.ip_addresses.join(", ")}</li>`;
+        const maskedIps = val.ip_addresses.map(() => "Private (Masked for security)").join(", ");
+        return `<li><strong>${iface}</strong>: ${maskedIps}</li>`;
     }).join("");
 
     const status = Object.entries(data.interface_status).map(([iface, up]) => {
-        return `<li><strong>${iface}</strong>: ${up ? "🟢 Up" : "🔴 Down"}</li>`;
+        return `<li><strong>${iface}</strong>: ${up ? "Up" : "Down"}</li>`;
     }).join("");
 
     return `
@@ -74,5 +75,6 @@ fetchAndDisplay("/api/health", "health", formatHealth);
 fetchAndDisplay("/api/processes", "processes", formatProcesses);
 fetchAndDisplay("/api/network", "network", formatNetwork);
 </script>
+
 
 {% endblock %}
