@@ -2,23 +2,43 @@
 {% block title %}Home - Nick Irwin{% endblock %}
 
 {% block content %}
-<h2>About Me</h2>
-<p>I'm Nick Irwin, an IT professional with experience spanning ERP systems, IT management, automation, and infrastructure. I’ve led technical projects across manufacturing environments, overseen ERP migrations, and implemented secure, scalable solutions that support business goals.</p>
+<h2 style="text-align:center;">About Me</h2>
 
-<p>This site showcases my hands-on portfolio as I continue expanding into cloud engineering, DevSecOps, and modern infrastructure development. My goal is to blend strategic leadership with practical execution, whether driving digital transformation from the top or building the tools that power it behind the scenes.</p>
+<div style="max-width: 800px; margin: 0 auto; text-align: center;">
+    <p><strong>I'm Nick Irwin</strong>, an IT professional with experience spanning <strong>ERP systems</strong>, <strong>IT management</strong>, <strong>automation</strong>, and <strong>infrastructure</strong>.</p>
+    <p>I’ve led technical projects across manufacturing environments, overseen <strong>ERP migrations</strong>, and implemented secure, scalable solutions that support business goals.</p>
+    <p>This site showcases my hands-on portfolio as I continue expanding into cloud engineering, DevSecOps, and modern infrastructure development.</p>
+    <p>My goal is to blend <strong>strategic leadership</strong> with <strong>practical execution</strong>, whether driving <strong>digital transformation</strong> from the top or building the tools that power it behind the scenes.</p>
+</div>
 
-<h2>How This Site Works</h2>
-<p>This dashboard is deployed on an AWS EC2 instance using:</p>
-<ul>
-    <li>Python + Flask for the backend</li>
-    <li>Gunicorn + systemd for service management</li>
-    <li>Nginx as a reverse proxy</li>
-    <li>SQLite for local persistence</li>
-    <li>JavaScript (AJAX) for dynamic dashboards</li>
-</ul>
-<p>Here’s the architecture:</p>
-<img src="{{ url_for('static', filename='diagram.png') }}" alt="Deployment Diagram" style="max-width:100%; border: 1px solid #ccc; padding: 5px;">
 
-<h2>Source Code</h2>
-<p>View the full source on GitHub: <a href="https://github.com/nick98555/flask-ec2-api" target="_blank">https://github.com/nick98555/flask-ec2-api</a></p>
+<h2 style="margin-top: 3rem;">How This Site Works</h2>
+
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; max-width: 1000px; margin: 2rem auto; gap: 2rem;">
+    <!-- Left Column: Description -->
+    <div style="flex: 1; min-width: 250px;">
+	    <div style="background-color: #1a1a1a; padding: 1.5rem; border: 1px solid #333; border-radius: 6px;">
+			<p>This site is built as a personal portfolio project to demonstrate skills in:</p>
+			<ul>
+				<li>Cloud Infrastructure (AWS EC2)</li>
+				<li>Python + Flask (Web/API)</li>
+				<li>Gunicorn + systemd (Production WSGI)</li>
+				<li>Nginx (Reverse Proxy)</li>
+				<li>SQLite (Lightweight data storage)</li>
+				<li>GitHub Actions (CI/CD pipeline)</li>
+			</ul>
+		</div>
+    </div>
+
+    <!-- Right Column: Diagram + GitHub -->
+    <div style="flex: 1; min-width: 250px; text-align: center;">
+	    <div style="background-color: #1a1a1a; padding: 1.5rem; border: 1px solid #333; border-radius: 6px;">
+			<img src="{{ url_for('static', filename='diagram.png') }}" alt="Deployment Diagram" style="max-width:100%; border: 1px solid #ccc; padding: 5px;">
+			<p style="margin-top: 1rem;">
+				View the source on GitHub:<br>
+				<a href="https://github.com/nick98555/flask-ec2-api" target="_blank">https://github.com/nick98555/flask-ec2-api</a>
+			</p>
+		</div>
+    </div>
+</div>
 {% endblock %}
