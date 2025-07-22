@@ -1,12 +1,24 @@
 {% extends "base.html" %}
-
-{% block title %}Home - Flask Dashboard{% endblock %}
+{% block title %}Home - Nick Irwin{% endblock %}
 
 {% block content %}
-    <h2>Welcome</h2>
-    <p>This is a lightweight personal monitoring dashboard hosted on AWS EC2 using Flask, Gunicorn, and Nginx.</p>
-    <ul>
-        <li><strong>API Access Logs:</strong> Track which endpoints are being used</li>
-        <li><strong>Login Failure Monitoring:</strong> See recent failed SSH login attempts</li>
-    </ul>
+<h2>About Me</h2>
+<p>I'm Nick Irwin, an IT professional with experience spanning ERP systems, IT management, automation, and infrastructure. I’ve led technical projects across manufacturing environments, overseen ERP migrations, and implemented secure, scalable solutions that support business goals.</p>
+
+<p>This site showcases my hands-on portfolio as I continue expanding into cloud engineering, DevSecOps, and modern infrastructure development. My goal is to blend strategic leadership with practical execution, whether driving digital transformation from the top or building the tools that power it behind the scenes.</p>
+
+<h2>How This Site Works</h2>
+<p>This dashboard is deployed on an AWS EC2 instance using:</p>
+<ul>
+    <li>Python + Flask for the backend</li>
+    <li>Gunicorn + systemd for service management</li>
+    <li>Nginx as a reverse proxy</li>
+    <li>SQLite for local persistence</li>
+    <li>JavaScript (AJAX) for dynamic dashboards</li>
+</ul>
+<p>Here’s the architecture:</p>
+<img src="{{ url_for('static', filename='diagram.png') }}" alt="Deployment Diagram" style="max-width:100%; border: 1px solid #ccc; padding: 5px;">
+
+<h2>Source Code</h2>
+<p>View the full source on GitHub: <a href="https://github.com/nick98555/flask-ec2-api" target="_blank">https://github.com/nick98555/flask-ec2-api</a></p>
 {% endblock %}
