@@ -12,7 +12,7 @@
 </div>
 
 
-<h2 style="margin-top: 3rem;">How This Site Works</h2>
+<h2 style="text-align: center; margin-top: 3rem;">How This Site Works</h2>
 
 <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; max-width: 1000px; margin: 2rem auto; gap: 2rem;">
     <!-- Left Column: Description -->
@@ -33,7 +33,9 @@
     <!-- Right Column: Diagram + GitHub -->
     <div style="flex: 1; min-width: 250px; text-align: center;">
 	    <div style="background-color: #1a1a1a; padding: 1.5rem; border: 1px solid #333; border-radius: 6px;">
-			<img src="{{ url_for('static', filename='diagram.png') }}" alt="Deployment Diagram" style="max-width:100%; border: 1px solid #ccc; padding: 5px;">
+			<div style="background-color: #f2f2f2; padding: 10px; border-radius: 6px;">
+				<img src="{{ url_for('static', filename='diagram.png') }}" alt="Deployment Diagram" style="max-width:100%; border: 1px solid #ccc; padding: 5px;">
+			</div>
 			<p style="margin-top: 1rem;">
 				View the source on GitHub:<br>
 				<a href="https://github.com/nick98555/flask-ec2-api" target="_blank">https://github.com/nick98555/flask-ec2-api</a>
