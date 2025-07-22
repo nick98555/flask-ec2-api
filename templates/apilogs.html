@@ -3,6 +3,19 @@
 {% block title %}API Access Logs{% endblock %}
 
 {% block content %}
+<div style="max-width: 800px; margin: 2rem auto; text-align: center;">
+    <div style="background-color: #1a1a1a; padding: 1.5rem; border: 1px solid #333; border-radius: 6px;">
+        <p>
+            Everything you do is being tracked! But only the safe, anonymous stuff makes it here to the public facing logs.
+        </p>
+        <p>
+            This log shows whenever someone accesses one of the API routes on this site. Each request is logged with a timestamp and the endpoint that was hit.
+        </p>
+        <p>
+            It’s part of the secure, lightweight, monitoring infrastructure that powers the dashboard. It is built entirely in Python + SQLite.
+        </p>
+    </div>
+</div>
 <h2>API Access Log</h2>
 <table>
     <thead>
